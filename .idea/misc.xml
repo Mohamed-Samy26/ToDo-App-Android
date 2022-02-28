@@ -5,14 +5,14 @@
       <map>
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_add_task.xml" value="0.23229166666666667" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_login.xml" value="0.23229166666666667" />
-        <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_main.xml" value="0.20516304347826086" />
+        <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_register.xml" value="0.23229166666666667" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/activity_tasks.xml" value="0.2" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/add_task_dialogue.xml" value="0.264" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/content_login.xml" value="0.23229166666666667" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/fragment_first.xml" value="0.23229166666666667" />
         <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/fragment_second.xml" value="0.23229166666666667" />
-        <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/item.xml" value="0.4" />
+        <entry key="..\:/flutter_projects/ITITimetableManagerapp/app/src/main/res/layout/item.xml" value="0.2" />
       </map>
     </option>
   </component>

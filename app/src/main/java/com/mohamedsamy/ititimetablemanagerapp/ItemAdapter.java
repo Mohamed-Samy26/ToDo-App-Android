@@ -24,14 +24,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         private TextView name;
         private TextView desc;
         private TextView date;
-        private Button dn;
+//        private Button dn;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             desc = itemView.findViewById(R.id.desc);
             date = itemView.findViewById(R.id.date);
-            dn = itemView.findViewById(R.id.btnDone);
+//            dn = itemView.findViewById(R.id.btnDone);
         }
     }
 
@@ -48,14 +48,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.date.setText(currentItem.getTime());
         holder.desc.setText(currentItem.getDi());
         holder.name.setText(currentItem.getName());
-        holder.dn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dbms.delTask(currentItem.getUid() , currentItem.getName(),
-                        currentItem.getDi() , currentItem.getTime());
-                del.run();
-            }
-        });
+//        holder.dn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dbms.delTask(currentItem.getUid() , currentItem.getName(),
+//                        currentItem.getDi() , currentItem.getTime());
+//                del.run();
+//            }
+//        });
     }
 
     @Override
