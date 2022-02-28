@@ -1,7 +1,6 @@
 package com.mohamedsamy.ititimetablemanagerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,8 +11,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -27,7 +24,7 @@ public class Tasks extends AppCompatActivity {
     private Cursor tasks;
     private boolean frst = false;
     private  ArrayList<Item> arr;
-    Runnable add = () -> { };
+    Runnable del = () -> { };
 
 
     TextView noData;
@@ -44,12 +41,10 @@ public class Tasks extends AppCompatActivity {
         btn = findViewById(R.id.addTask);
         tasks = dbms.getTask(inIntent.getStringExtra("UID"));
         arr = new ArrayList<Item>();
-
-
-
         Runnable x = () ->
         {
             try {
+                arr.clear();
                 tasks.moveToFirst();
                 while (!tasks.isAfterLast()) {
                     arr.add(new Item(inIntent.getStringExtra("UID"),
@@ -58,20 +53,21 @@ public class Tasks extends AppCompatActivity {
                             tasks.getString(tasks.getColumnIndex(DBhelper.COL_TIME))));
                     tasks.moveToNext();
                 }
+                adapter.notifyDataSetChanged();
             } catch (NullPointerException e) {
                 System.out.println("Errorrrrrr");
             }
             r1 = findViewById(R.id.r1);
             layoutManager = new LinearLayoutManager(this);
             r1.setLayoutManager(layoutManager);
-            adapter = new ItemAdapter(arr, dbms, add);
+            adapter = new ItemAdapter(arr, dbms, del);
             if (!arr.isEmpty()) {
                 r1.setAdapter(adapter);
                 noData.setWidth(0);
                 noData.setHeight(0);
             }
         };
-        add = x;
+        del = x;
         x.run();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +106,10 @@ public class Tasks extends AppCompatActivity {
         super.onResume();
         System.out.println("Resuming");
         if(frst) {
+            arr.clear();
+            adapter.notifyDataSetChanged();
             recreate();
-
+            adapter.notifyDataSetChanged();
         }
         else frst = true;
 //        noData = findViewById(R.id.noData);
