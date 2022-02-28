@@ -69,6 +69,10 @@ public class DBhelper extends SQLiteOpenHelper {
     }
     public void addTask(String uid , String name ,String desc, String time){
         SQLiteDatabase db = this.getWritableDatabase();
+        if (uid.length() == 0){uid = " ";};
+        if (name.length() == 0){name = " ";};
+        if (desc.length() == 0){desc = " ";};
+        if (time.length() == 0){time = " ";};
         ContentValues contentValues = new ContentValues();
         contentValues.put("uid", uid);
         contentValues.put("name", name);
@@ -82,6 +86,12 @@ public class DBhelper extends SQLiteOpenHelper {
         }
 //        db.execSQL("INSERT INTO tasks(name,uid,di,time) VALUES ('21','12','12','12')");
         System.out.println("Added task Successfully");
+    }
+    public void delTask(String uid , String name ,String desc, String time){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME2 , COL_UID +"="+ uid+
+                " and "+COL_TDESC +"="+ desc+" and "+
+                COL_TNAME +"="+ name +" and "+COL_TIME +"="+ time, null );
     }
     public Cursor getTask(String uid) {
         SQLiteDatabase db = this.getReadableDatabase();

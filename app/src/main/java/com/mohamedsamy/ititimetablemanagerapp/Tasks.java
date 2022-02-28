@@ -24,44 +24,55 @@ public class Tasks extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private Button btn;
     private Intent addTask;
+    private Cursor tasks;
+    private boolean frst = false;
+    private  ArrayList<Item> arr;
+    Runnable add = () -> { };
+
 
     TextView noData;
-    DBhelper dbms = new DBhelper(this , "data.db" , null , 2);
+    DBhelper dbms ;
     @SuppressLint("Range")
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
+        dbms = new DBhelper(this , "data.db" , null , 2);
         noData = findViewById(R.id.noData);
         Intent inIntent = getIntent();
         btn = findViewById(R.id.addTask);
-        Cursor tasks = dbms.getTask(inIntent.getStringExtra("UID"));
+        tasks = dbms.getTask(inIntent.getStringExtra("UID"));
+        arr = new ArrayList<Item>();
 
-        ArrayList<Item> arr = new ArrayList<Item>();
 
-        try {
-            tasks.moveToFirst();
-            while (!tasks.isAfterLast()){
-                arr.add(new Item(inIntent.getStringExtra("UID"),
-                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_TNAME)) ,
-                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_TDESC)),
-                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_TIME))));
-                tasks.moveToNext();
+
+        Runnable x = () ->
+        {
+            try {
+                tasks.moveToFirst();
+                while (!tasks.isAfterLast()) {
+                    arr.add(new Item(inIntent.getStringExtra("UID"),
+                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TNAME)),
+                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TDESC)),
+                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TIME))));
+                    tasks.moveToNext();
+                }
+            } catch (NullPointerException e) {
+                System.out.println("Errorrrrrr");
             }
-        }
-         catch (NullPointerException e) {
-             System.out.println("Errorrrrrr");
-        }
-        r1 = findViewById(R.id.r1);
-        layoutManager = new LinearLayoutManager(this);
-        r1.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(arr);
-        if (!arr.isEmpty()) {
-            r1.setAdapter(adapter);
-            noData.setWidth(0);
-            noData.setHeight(0);
-        }
+            r1 = findViewById(R.id.r1);
+            layoutManager = new LinearLayoutManager(this);
+            r1.setLayoutManager(layoutManager);
+            adapter = new ItemAdapter(arr, dbms, add);
+            if (!arr.isEmpty()) {
+                r1.setAdapter(adapter);
+                noData.setWidth(0);
+                noData.setHeight(0);
+            }
+        };
+        add = x;
+        x.run();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +80,7 @@ public class Tasks extends AppCompatActivity {
                 addTask = new Intent(Tasks.this , AddTask.class);
                 addTask.putExtra("UID" , inIntent.getStringExtra("UID") );
                 startActivity(addTask);
+                adapter.notifyDataSetChanged();
             }
         });
         if (tasks == null || arr.isEmpty()){
@@ -84,9 +96,81 @@ public class Tasks extends AppCompatActivity {
             }
             r1.setHasFixedSize(false);
         }
+        adapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dbms.close();
+    }
+
+    @SuppressLint("Range")
     protected void onResume() {
         super.onResume();
+        System.out.println("Resuming");
+        if(frst) {
+            recreate();
 
+        }
+        else frst = true;
+//        noData = findViewById(R.id.noData);
+//        Intent inIntent = getIntent();
+//        btn = findViewById(R.id.addTask);
+//        tasks = dbms.getTask(inIntent.getStringExtra("UID"));
+//        arr = new ArrayList<Item>();
+//
+//
+//        Runnable x = () ->
+//        {
+//            try {
+//                tasks.moveToFirst();
+//                arr.clear();
+//                while (!tasks.isAfterLast()) {
+//                    arr.add(new Item(inIntent.getStringExtra("UID"),
+//                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TNAME)),
+//                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TDESC)),
+//                            tasks.getString(tasks.getColumnIndex(DBhelper.COL_TIME))));
+//                    tasks.moveToNext();
+//                }
+//            } catch (NullPointerException e) {
+//                System.out.println("Errorrrrrr");
+//            }
+//            r1 = findViewById(R.id.r1);
+//            layoutManager = new LinearLayoutManager(this);
+//            r1.setLayoutManager(layoutManager);
+//            adapter = new ItemAdapter(arr, dbms, add);
+//            if (!arr.isEmpty()) {
+//                r1.setAdapter(adapter);
+//                noData.setWidth(0);
+//                noData.setHeight(0);
+//            }
+//        };
+//        add = x;
+//        x.run();
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addTask = new Intent(Tasks.this , AddTask.class);
+//                addTask.putExtra("UID" , inIntent.getStringExtra("UID") );
+//                startActivity(addTask);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//        if (tasks == null || arr.isEmpty()){
+//            System.out.println("Empty tasks");
+//        }
+//        else {
+//            ArrayList<Item> items = new ArrayList<Item>();
+//            while (!tasks.isAfterLast()){
+//                items.add(new Item(inIntent.getStringExtra("UID"),
+//                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_UID)) ,
+//                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_UID))  ,
+//                        tasks.getString(tasks.getColumnIndex(DBhelper.COL_TIME))));
+//            }
+//            r1.setHasFixedSize(false);
+//        }
+//        adapter.notifyDataSetChanged();
     }
 }
